@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "baseUrl": "."
+  },
+  "exclude": ["coverage", "dist", "node_modules", "temp", "tmp", "vendor"],
+  "typeAcquisition": {
+    "enable": true,
+    "include": ["ember", "qunit", "ember-qunit"]
+  }
+}

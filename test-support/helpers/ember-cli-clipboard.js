@@ -1,5 +1,6 @@
 import { run } from '@ember/runloop';
-import Test from 'ember-test';
+import { registerAsyncHelper } from '@ember/test';
+import { getContext } from '@ember/test-helpers';
 
 /* === Integration Test Helpers === */
 
@@ -27,15 +28,22 @@ export function triggerError(context, selector) {
 
 /* === Acceptance Test Helpers === */
 
-/**
- * Default export is a function that registers acceptance test helpers
- */
+export function triggerCopySuccess(selector) {
+    const { owner } = getContext();
+    fireComponentActionFromApp(owner, selector, 'success');
+}
+
+export function triggerCopyError(selector) {
+    const { owner } = getContext();
+    fireComponentActionFromApp(owner, selector, 'error');
+}
+
 export default function() {
-  Test.registerAsyncHelper('triggerCopySuccess', function(app, selector='.copy-btn') {
+  registerAsyncHelper('triggerCopySuccess', function(app, selector='.copy-btn') {
     fireComponentActionFromApp(app, selector, 'success');
   });
 
-  Test.registerAsyncHelper('triggerCopyError', function(app, selector='.copy-btn') {
+  registerAsyncHelper('triggerCopyError', function(app, selector='.copy-btn') {
     fireComponentActionFromApp(app, selector, 'error');
   });
 }
@@ -66,7 +74,7 @@ function fireComponentActionFromApp(app, selector, actionName) {
  * @returns {Void}
  */
 function fireComponentAction(context, selector, actionName) {
-  let component = getComponentBySelector(context, selector);
+  const component = getComponentBySelector(context, selector);
   fireActionByName(component, actionName);
 }
 
@@ -78,8 +86,9 @@ function fireComponentAction(context, selector, actionName) {
  * @returns {Object} component object
  */
 function getComponentBySelector(context, selector='.copy-btn') {
-  let emberId = context.$(selector).attr('id');
-  return context.container.lookup('-view-registry:main')[emberId];
+  const emberId = document.querySelector(selector).getAttribute('id');
+  const { owner } = getContext();
+  return owner.lookup('-view-registry:main')[emberId];
 }
 
 /**
@@ -90,7 +99,7 @@ function getComponentBySelector(context, selector='.copy-btn') {
  * @returns {Void}
  */
 function fireActionByName(component, actionName) {
-  let action = component[actionName];
+  const action = component[actionName];
 
   run(() => {
     if (typeof action === 'string') {

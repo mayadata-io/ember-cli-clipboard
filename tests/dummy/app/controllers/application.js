@@ -30,7 +30,6 @@ export default Controller.extend({
     copyTargetSuccess() {
       this.sendSuccessMessage({copyTarget: true});
     },
-
     copyTargetError() {
       this.sendErrorMessage({copyTarget: true});
     },
@@ -43,6 +42,12 @@ export default Controller.extend({
       this.sendErrorMessage({copyDirect: true});
     },
 
+    copyBlockSuccess() {
+      this.sendSuccessMessage({copyBlock: true});
+    },
+    copyBlockError() {
+      this.sendErrorMessage({copyBlock: true});
+    },
     cutTargetSuccess() {
       this.sendSuccessMessage({cutTarget: true, action: 'cut'});
     },
